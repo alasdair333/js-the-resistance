@@ -1,0 +1,9 @@
+{
+  "name": "js-the-resistance-client",
+  "version": "0.0.1",
+  "description": "The resistance card game. Online",
+  "dependencies": {
+    "express": "^4.8.7",
+    "socket.io": "^1.0.6"
+  }
+}
