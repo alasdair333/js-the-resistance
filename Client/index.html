@@ -11,10 +11,13 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      #users { list-style-type: none; margin: 0; padding: 0; }
+      #users li { padding: 5px 10px; }
     </style>
   </head>
   <body>
     <ul id="messages"></ul>
+    <ul id="users"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
@@ -26,8 +29,8 @@
     var username = prompt('What is your username?');
     var socket = io();
 
-    var joinRoom = function (s, room) {
-      s.emit('join room', username, room );
+    var joinRoom = function (s, room, password) {
+      s.emit('join room', username, room, password);
     };
 
 		$('form').submit(function(){
@@ -40,7 +43,17 @@
 	    	$('#messages').append($('<li>').text(username+"> "+msg));
   		});
 
-    joinRoom(socket, chatRoom); 
+    socket.on('updateroom', function (msg, users){
+        $('#messages').append($('<li>').text(msg));
+        
+    });
+
+
+    socket.on('join failed', function(msg){
+      alert(msg);
+    })
+
+    joinRoom(socket, chatRoom, prompt("Please Enter the password")); 
 
 	</script>
 
