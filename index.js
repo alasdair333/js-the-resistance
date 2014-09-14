@@ -52,8 +52,10 @@ io.on('connection', function(socket){
 		}
 		else
 		{
-			var newRoom = new Room(roomName, password, socket, [], new Resistance());
+			var theRes = new Resistance(); 
+			var newRoom = new Room(roomName, password, socket, [], theRes);
 			
+			theRes.players = newRoom.players;
 			newRoom.players.push(newUser);
 			rooms.push(newRoom);
 			theRoom = newRoom;
@@ -82,18 +84,18 @@ io.on('connection', function(socket){
     	io.to(socket.room).emit('chat message', socket.username, msg);
   	});
 
-  	socket.on('start game', function(roomName){
+  	socket.on('game event', function(roomName, gameEvent){
 
   		for(var i = 0; i < rooms.length; i++)
   		{
   			if(rooms[i].name == roomName)
   			{
-  				console.log(rooms[i].players);
-  				rooms[i].game.runState();
+  				//rooms[i].game.players = rooms[i].players;
+  				rooms[i].game.processEvent(gameEvent);
   			}
   		}
   		
-  	})
+  	});
 });
 
 
@@ -134,51 +136,46 @@ function Resistance()
 	this.state = 0;
 	this.players = null;
 
-
-
-
 	//State functions
-	var init = {name: "init", func: function(){
-		/*
-		for(var i = 0; i < this.players.length; i++)
+	var init = {name: "init", func: function(game){
+		
+		for(var i = 0; i < game.players.length; i++)
 		{
-			this.players[i].socket.emit('chat message', 'Lets play a game: '+this.players[i].name);
-		}*/
+			game.players[i].socket.emit('chat message', 'TheGame', 'Lets play a game: '+game.players[i].name);
+		}
 
-		console.log("In init");
-
-		this.state++;
+		game.state++;
 	}}
 
-	var dealCharacters = {name: "dealCharacters", func: function(){
+	var dealCharacters = {name: "dealCharacters", func: function(game){
 
 	}}; 
 
-	var revelSpies = {name: "revelSpies", func: function(){
+	var revelSpies = {name: "revelSpies", func: function(game){
 
 	}}; 
 
-	var teamLeader = {name: "teamLeader", func: function(){
+	var teamLeader = {name: "teamLeader", func: function(game){
 
 	}};
 
-	var teamBuild = {name: "teamBuild", func: function(){
+	var teamBuild = {name: "teamBuild", func: function(game){
 
 	}};
 
-	var voteTeam = {name: "voteTeam", func: function(){
+	var voteTeam = {name: "voteTeam", func: function(game){
 
 	}}; 
 
-	var mission = {name: "mission", func: function(){
+	var mission = {name: "mission", func: function(game){
 
 	}};
 
-	var missionEnd = {name: "missionEnd", func: function(){
+	var missionEnd = {name: "missionEnd", func: function(game){
 
 	}}; 
 
-	var endGame = {name: "endGame", func: function(){
+	var endGame = {name: "endGame", func: function(game){
 
 	}}; 
 
@@ -189,7 +186,22 @@ function Resistance()
 
 	this.runState = function()
 	{
-		this.ResistanceGameState[this.state].func();
+		this.ResistanceGameState[this.state].func(this);
+	}
+
+	this.processEvent = function (event)
+	{
+		switch(event["event"])
+		{
+			case "start game":
+				init.func(this);
+			break;
+
+			default:
+				console.log("Error")
+			break;
+		}
+
 	}
 
 }

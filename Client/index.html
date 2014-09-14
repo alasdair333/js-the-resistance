@@ -41,7 +41,11 @@
 
     function startGame()
     {
-      socket.emit('start game', chatRoom);
+      var gameJSON = {
+        "event":"start game"
+      };
+
+      socket.emit('game event', chatRoom, gameJSON);
     };
 
     $('form').submit(function(){ return false;});
