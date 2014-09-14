@@ -6,7 +6,7 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
       form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form input { border: 0; padding: 10px; width: 30%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
@@ -19,7 +19,8 @@
     <ul id="messages"></ul>
     <ul id="users"></ul>
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      <input id="m" autocomplete="off" /><button name="Send" onclick="sendChat()">Send</button> 
+      <button name="Start" onclick="startGame()">Start</button>
     </form>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -33,11 +34,17 @@
       s.emit('join room', username, room, password);
     };
 
-		$('form').submit(function(){
+		function sendChat(){
 		    socket.emit('chat message', $('#m').val());
 		    $('#m').val('');
-		    return false;
-		});
+		};
+
+    function startGame()
+    {
+      socket.emit('start game', chatRoom);
+    };
+
+    $('form').submit(function(){ return false;});
 
 		socket.on('chat message', function(username, msg){
 	    	$('#messages').append($('<li>').text(username+"> "+msg));
@@ -45,7 +52,6 @@
 
     socket.on('updateroom', function (msg, users){
         $('#messages').append($('<li>').text(msg));
-        
     });
 
 
