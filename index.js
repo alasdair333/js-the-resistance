@@ -54,7 +54,7 @@ io.on('connection', function(socket){
 		{
 			var theRes = new Resistance(); 
 			var newRoom = new Room(roomName, password, socket, [], theRes);
-			
+
 			theRes.players = newRoom.players;
 			newRoom.players.push(newUser);
 			rooms.push(newRoom);
@@ -135,14 +135,51 @@ function Resistance()
 {
 	this.state = 0;
 	this.players = null;
+	this.characters = []; 
 
 	//State functions
 	var init = {name: "init", func: function(game){
+		var spies = 0;
 		
 		for(var i = 0; i < game.players.length; i++)
 		{
 			game.players[i].socket.emit('chat message', 'TheGame', 'Lets play a game: '+game.players[i].name);
 		}
+
+		switch(game.players.length)
+		{
+			case 5:
+			case 6:
+				spies = 2;
+				break;
+			case 7:
+			case 8:
+			case 9:
+				spies = 3;
+				break;
+			case 10:
+				spies = 4;
+				break;
+		}
+
+		for(var i = 0; i < game.players.length; i++)
+		{
+			if(spies > 0)
+			{
+				game.characters.push("spy");
+				spies--; 
+			}
+			else
+			{
+				game.characters.push("Resistance");
+			}
+		}
+
+		console.log(game.characters);
+
+		game.characters.shuffle()
+
+		console.log(game.characters);
 
 		game.state++;
 	}}
@@ -184,11 +221,6 @@ function Resistance()
 
 	this.stateName = this.ResistanceGameState[this.state].name;
 
-	this.runState = function()
-	{
-		this.ResistanceGameState[this.state].func(this);
-	}
-
 	this.processEvent = function (event)
 	{
 		switch(event["event"])
@@ -201,7 +233,17 @@ function Resistance()
 				console.log("Error")
 			break;
 		}
-
 	}
+}
 
+Array.prototype.shuffle = function() {
+  var i = this.length, j, temp;
+  if ( i == 0 ) return this;
+  while ( --i ) {
+     j = Math.floor( Math.random() * ( i + 1 ) );
+     temp = this[i];
+     this[i] = this[j];
+     this[j] = temp;
+  }
+  return this;
 }
