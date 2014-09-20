@@ -8,44 +8,44 @@ var options ={
   'force new connection': true
 };
 
-var names = ["Pete","Josh","Kevin","Graham","Chris","John","Rik","Emma","Ross","Alasdair"];
+var chatUser1 = {'name':'Tom'};
+var chatUser2 = {'name':'Sally'};
+var chatUser3 = {'name':'Dana'};
+
+var room = "/test";
+var password = 'testPassword';
 
 
-it("Should be possible to connect to the chat room", function(done)
-{
-	var clients = []; 
-	var room = '/test';
-	var password = 'test';
-	var message = "hi";
+it('Should broadcast new user to all users', function(done){
+  var client1 = io.connect(socketURL, options);
 
-	for(var i = 0; i < 10; i++)
-	{
-		var client = {"name":names[i], "socket":io.connect(socketURL, options)};
+  client1.on('connect', function(data){
+    client1.emit('join room', chatUser1.name, room, password);
 
-		client['socket'].on('chat message', function(username, msg){
-	    	msg.should.equal(message);
-  		});
+    /* Since first client is connected, we connect
+    the second client. */
+    var client2 = io.connect(socketURL, options);
 
-	    client['socket'].on('updateroom', function (msg, users){
-	    	users.should.not.be(null);
+    client2.on('connect', function(data){
+      client1.emit('join room', chatUser1.name, room, password);
+    });
 
-	    	done();
-	    });
+    client2.on('updateroom', function(msg, user){
+      msg.should.equal("You have connected to "+room);
+      client2.disconnect();
+    });
 
+  });
 
-	    client['socket'].on('join failed', function(msg){
+  /*
+  var numUsers = 0;
+  client1.on('updateroom', function(msg, user){
+    numUsers += 1;
 
-	    });
-
-	    clients.push(client);
-	}
-
-
-	for(var i = 0; i < clients.length; i++)
-	{
-		clients[i]['socket'].emit('join room', clients[i]['name'], room, password)
-	}
-
-	
-
-})
+    if(numUsers === 2){
+      usersName.should.equal(chatUser2.name + "  has connected to room");
+      client1.disconnect();
+      done();
+    }
+  });*/
+});
