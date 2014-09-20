@@ -2,6 +2,10 @@
 /*
 	Socket functions
 */
+
+/*
+	Return a list of all active rooms
+*/
 app.get('/', function (req, res) {
 	var connection = "Please connect to a chatroom: \n";
 
@@ -13,17 +17,23 @@ app.get('/', function (req, res) {
 	res.send(connection)
 });
 
+/*
+	Return the HTML file for the chatroom
+*/
 app.get('/:room', function (req, res) {
 	res.sendfile('Client/index.html');
 });
 
-app.get('/games/:file', function(req,res) {
-	console.log("Getting "+req.param("file"));
-	res.sendfile('games/'+req.param("file"));
-});
-
+/*
+	Socket Connection function
+*/
 io.on('connection', function(socket){
 
+	/*
+		Process a join room socket event
+		If the room doesn't exist 
+		create a new one otherwise join the room
+	*/
 	socket.on('join room', function(username, roomName, password){
 		var roomExists = false;
 		var okToEnter = false;
@@ -78,14 +88,23 @@ io.on('connection', function(socket){
 		}		
 	});
 
+	/*
+		Close the connection to the room
+	*/
 	socket.on('leave room', function(){
 		socket.leave(socket.room);
 	});
 
+	/*
+		Process a chat message event
+	*/
   	socket.on('chat message', function(msg){
     	io.to(socket.room).emit('chat message', socket.username, msg);
   	});
 
+  	/*
+		Process a game event
+  	*/
   	socket.on('game event', function(roomName, gameEvent){
 
   		for(var i = 0; i < rooms.length; i++)
@@ -100,6 +119,10 @@ io.on('connection', function(socket){
   	});
 });
 
+
+/*
+	Listen on a connection
+*/
 http.listen(3000, function () {
 	console.log('listening on *:3000');
 });
