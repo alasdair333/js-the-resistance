@@ -21,6 +21,7 @@
     <form action="">
       <input id="m" autocomplete="off" /><button name="Send" onclick="sendChat()">Send</button> 
       <button name="Start" onclick="startGame()">Start</button>
+      <button name="Next" onclick="nextState()">Start</button>
     </form>
 
   <script src="/socket.io/socket.io.js"></script>
@@ -48,6 +49,15 @@
       socket.emit('game event', chatRoom, gameJSON);
     };
 
+    function nextState()
+    {
+      var gameJSON = {
+        "event":"next state"
+      };
+
+      socket.emit('game event', chatRoom, gameJSON);
+    };
+
     $('form').submit(function(){ return false;});
 
 		socket.on('chat message', function(username, msg){
@@ -57,7 +67,6 @@
     socket.on('updateroom', function (msg, users){
         $('#messages').append($('<li>').text(msg));
     });
-
 
     socket.on('join failed', function(msg){
       alert(msg);
