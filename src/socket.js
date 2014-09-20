@@ -1,7 +1,3 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var rooms = [];
 
 /*
 	Socket functions
@@ -104,49 +100,8 @@ io.on('connection', function(socket){
   	});
 });
 
-
-
 http.listen(3000, function () {
 	console.log('listening on *:3000');
 });
-
-/*
-	Room:
-	This function create a room for a game. 
-	
-*/
-function Room (name, password, owner, players, game)
-{
-	this.name = name;
-	this.password = password;
-	this.owner = owner;
-	this.players = players;
-	this.game = game; 
-
-	this.state = game.stateName; 
-}
-
-/*
-	Player:
-
-*/
-function Player(name, socket)
-{
-	this.name = name;
-	this.socket = socket; 
-}
-
-
-Array.prototype.shuffle = function() {
-  var i = this.length, j, temp;
-  if ( i == 0 ) return this;
-  while ( --i ) {
-     j = Math.floor( Math.random() * ( i + 1 ) );
-     temp = this[i];
-     this[i] = this[j];
-     this[j] = temp;
-  }
-  return this;
-}
 
 
