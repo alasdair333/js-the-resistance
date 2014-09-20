@@ -79,8 +79,8 @@ io.on('connection', function(socket){
 			socket.username = username;
 			socket.room = roomName;
 			socket.join(roomName);
-			socket.emit('updateroom', 'You have connected to '+roomName);
-			socket.broadcast.to(socket.room).emit('updateroom', username+' has connected to room');
+			socket.emit('updateroom', 'You have connected to '+roomName, username);
+			socket.broadcast.to(socket.room).emit('updateroom', username+' has connected to room', username);
 		}
 		else
 		{
