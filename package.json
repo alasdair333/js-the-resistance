@@ -11,7 +11,7 @@
     "uglify-js": "^2.4.15"
   },
   "scripts": {
-    "test": "npm run build && npm run run-server && ./node_modules/.bin/mocha",
+    "test": "npm run build && npm run run-server && mocha",
     "build": "make debug",
     "run-server": "node index_min.js &"
   },
