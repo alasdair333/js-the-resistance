@@ -10,7 +10,6 @@ before_install:
   - "npm install express -g"
 before_script: 
   - "make debug"
-  - "chmod +x js-the-resistance"
-  - "./js-the-resistance &"
+  - "node index_min.js &"
   - "sleep 15"
 script: "mocha"
