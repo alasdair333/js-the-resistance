@@ -1,11 +1,12 @@
-SOURCES := $(shell find src -name '*.js')
+GLOBAL := $(shell find src/global -name '*.js')
+JS := $(shell find src/js -name '*.js')
+GAMES := $(shell find src/games -name '*.js')
 
 release:
-	uglifyjs $(SOURCES) -m -c -o index_min.js
+	uglifyjs $(GLOBAL) $(JS) $(GAMES) -m -c -o index_min.js
 
 debug:
-	uglifyjs $(SOURCES) -b -o index_min.js
-	cat index_min.js
+	uglifyjs $(GLOBAL) $(JS) $(GAMES) -b -o index_min.js
 
 all: release
 	
