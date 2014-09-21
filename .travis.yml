@@ -11,4 +11,5 @@ before_script:
   - "make"
   - "chmod +x js-the-resistance"
   - "./js-the-resistance &"
+  - "wait 15"
 script: "mocha"
