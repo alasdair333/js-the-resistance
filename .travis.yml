@@ -7,6 +7,7 @@ node_js:
 before_install: 
   - "npm install uglify-js -g"
   - "npm install mocha -g"
+  - "npm install express -g"
 before_script: 
   - "make debug"
   - "chmod +x js-the-resistance"
