@@ -8,8 +8,8 @@ before_install:
   - "npm install uglify-js -g"
   - "npm install mocha -g"
 before_script: 
-  - "make"
+  - "make debug"
   - "chmod +x js-the-resistance"
   - "./js-the-resistance &"
-  - "wait 15"
+  - "sleep 15"
 script: "mocha"

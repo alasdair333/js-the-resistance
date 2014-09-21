@@ -4,7 +4,7 @@ release:
 	uglifyjs $(SOURCES) -m -c -o index_min.js
 
 debug:
-	uglifyjs $(SOURCES) -b -o index_min_debug.js
+	uglifyjs $(SOURCES) -b -o index_min.js
 
 all: release
 	
