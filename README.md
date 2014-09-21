@@ -1,3 +1,5 @@
+![Build](https://travis-ci.org/alasdair333/js-the-resistance.svg?branch=master)
+
 js-the-resistance
 =================
 
