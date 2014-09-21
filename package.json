@@ -4,13 +4,15 @@
   "description": "The resistance card game. Online",
   "dependencies": {
     "express": "^4.9.4",
+    "mocha": "^1.21.4",
     "should": "^4.0.4",
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.1.0",
     "uglify-js": "^2.4.15"
   },
   "scripts": {
-    "test": "npm run run-server && mocha",
+    "test": "npm run build && npm run run-server && ./node_modules/.bin/mocha",
+    "build": "make debug",
     "run-server": "node index_min.js &"
   },
   "repository": {
