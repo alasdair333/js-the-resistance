@@ -4,5 +4,6 @@ install:
   - "npm install -g uglify-js"
   - "npm install -g should"
   - "npm install -g express"
+  - "npm install -g socket.io"
 node_js:
   - "0.10"
