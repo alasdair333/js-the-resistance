@@ -1,4 +1,6 @@
 language: node_js
+install:
+  - "npm install -g mocha"
 node_js:
   - "0.10"
 before_script: 
