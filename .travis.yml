@@ -3,7 +3,3 @@ node_js:
   - "0.10"
 before_script: 
   - "make debug"
-script: 
-  - "node index_min.js &"
-  - "sleep 15"
-  - "mocha"
