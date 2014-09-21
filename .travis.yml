@@ -1,11 +1,6 @@
 language: node_js
 node_js:
   - "0.10"
-install: 
-  - "npm install express -g"
-  - "npm install socket.io-client -g"
-  - "npm install uglify-js -g"
-  - "npm install mocha -g"
 before_script: 
   - "make debug"
 script: 
