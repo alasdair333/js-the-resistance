@@ -89,6 +89,18 @@ io.on('connection', function(socket){
 	});
 
 	/*
+		Shutdown server
+	*/
+	socket.on('shutdown server', function(pass)
+	{
+		console.log("Shutting down server recv");
+		if(pass == 'adminPassword')
+		{
+			gracefulShutdown(socket);
+		}
+	});
+
+	/*
 		Close the connection to the room
 	*/
 	socket.on('leave room', function(){
@@ -126,5 +138,27 @@ io.on('connection', function(socket){
 http.listen(3000, function () {
 	console.log('listening on *:3000');
 });
+
+// listen for TERM signal .e.g. kill 
+process.on ('SIGTERM', gracefulShutdown);
+
+// listen for INT signal e.g. Ctrl-C
+process.on ('SIGINT', gracefulShutdown); 
+
+function gracefulShutdown(){
+
+	io.close(function()
+	{
+		console.log("Closed Remaining Connections");
+		process.exit(0);
+	});		
+
+	// if after 
+	setTimeout(function() 
+	{
+    	console.error("Could not close connections in time, forcefully shutting down");
+       	process.exit()
+  	}, 10*1000);		
+}
 
 

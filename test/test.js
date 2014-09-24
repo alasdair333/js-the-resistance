@@ -21,7 +21,7 @@ var chatUser10 = {'name':'Lenny'};
 
 var room = "/test";
 var password = 'testPassword';
-
+var adminpass = 'adminPassword'
 
 it('Should broadcast new user to all users', function(done){
 	var client1 = io.connect(socketURL, options);
@@ -98,6 +98,7 @@ it('Should send message to everyone', function(done){
 			msg.should.equal("hi");
 
 			client1.disconnect();
+			client2.disconnect();
 
 			done();
 
@@ -109,9 +110,21 @@ it('Should send message to everyone', function(done){
 		client2.on('connect', function(data){
 				client2.emit('join room', chatUser2.name, room, password);
 		  		client2.emit('chat message', "hi");
-		  		//client2.disconnect();
 		});
 	});	
 });
 
+it('Should cycle through the game states', function(done){
+
+	done();
+});
+
+it('Should shutdown the server', function(done){
+	var client1 = io.connect(socketURL, options);
+
+	client1.on('connect', function(data){
+		client1.emit('shutdown server', adminpass);
+		done();
+	});
+})
 

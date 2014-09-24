@@ -26,7 +26,7 @@ var Resistance = function()
 			case 9:
 				spies = 3;
 				break;
-			case 10:jm 
+			case 10:
 				spies = 4;
 				break;
 		}
