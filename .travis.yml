@@ -1,10 +1,6 @@
 language: node_js
 install:
-  - "npm install -g mocha"
-  - "npm install -g uglify-js"
-  - "npm install -g should"
-  - "npm install -g express"
-  - "npm install -g socket.io"
+  - "npm install"
   - "npm link"
 node_js:
   - "0.10"
